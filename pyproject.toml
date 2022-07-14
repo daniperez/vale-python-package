@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name="vale"
+# This version corresponds to the original Vale's version, plus a 4th number to
+# account for fixes to this package. That 4th number is needed because PyPi
+# doesn't allow to re-release or upload deleted versions, every uploaded
+# version must be unique.
+version = "2.20.0.1"
+authors = [
+  { name="Dani Perez", email="daniperez@example.com" },
+]
+description = "Install Vale (grammar & style check tool) in python environments."
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/daniperez/vale-python-package"
+"Bug Tracker" = "https://github.com/daniperez/vale-python-package/issues"
+
+
+[project.scripts]
+vale = "vale.main:main"

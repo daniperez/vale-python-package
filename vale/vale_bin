@@ -1,0 +1,6 @@
+This is a placeholder for the actual Vale binary.
+
+Having a placeholder will allow pip to remove this
+file if the package is uninstalled.
+
+If we find this placeholder, we download Vale's binary.
