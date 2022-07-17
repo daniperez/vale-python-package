@@ -1,5 +1,9 @@
 # Vale Python Package
 
+> ⚠️  Vale is a software developed by errata.ai and a community of open-source
+> contributors. This repository just makes that software available to Python
+> users. The author is not affiliated nor endorsed by errata.ai.
+
 [Vale](https://vale.sh/) is a command-line tool that can enforce an editorial
 style guide onto your text. It's written in Go. The purpose of this package is
 to allow Python users to have Vale as a dependency.
