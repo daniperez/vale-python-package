@@ -19,9 +19,8 @@ permissions:
 
 jobs:
   deploy:
-
+    environment: testing
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
@@ -39,5 +38,5 @@ jobs:
       with:
         user: __token__
         password: ${{ secrets.PYPI_API_TOKEN }} 
-        repository_url: https://test.pypi.org/legacy/
+        repository_url: ${{ secrets.PYPI_URL }}
         skip_existing: true
