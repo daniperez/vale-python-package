@@ -24,7 +24,7 @@ jobs:
         pip install pytest
     - name: Test with pytest
       run: |
-        export VALE_VERSION = $(cat pyproject.toml  | grep "^version" | cut -d " " -f 3 | sed -e "s/\"//g)
+        export VALE_VERSION = $(cat pyproject.toml  | grep "^version" | cut -d " " -f 3 | sed -e "s/\"//g")
         echo "Installing $VALE_VERSION ..."
         pip install vale == "$VALE_VERSION"
   on-failure:
