@@ -1,3 +1,5 @@
+[![Package Release](https://github.com/daniperez/vale-python-package/actions/workflows/python-publish.yml/badge.svg)](https://github.com/daniperez/vale-python-package/actions/workflows/python-publish.yml)
+
 # Vale Python Package
 
 > ⚠️  Vale is a software developed by errata.ai and a community of open-source
@@ -14,21 +16,20 @@ You can add `vale` package as a dependency in your `setup.py`,
 
 The versions of this package correspond exactly to Vale's.  That is, if you add
 `vale==2.20.0` as a dependency, Vale with that same version will be installed.
-Note that Vale as such is not included in this package but downloaded the first
-time you execute `vale`.
+Note that **Vale as such is not included in this package but downloaded the first
+time you execute `vale`**.
 
 # Releasing (only for contributors)
-## Pre-requisites
+1. Change version in `pyproject.toml`. Changing the version changes the
+   version of Vale that gets downloaded. See note below.
+2. Commit & push.
+3. Github's Actions will deal with the new release.
 
-python3 -m pip install --upgrade build
-python3 -m pip install --upgrade twine
-
-## Releasing
-1. Change version
-2. python3 -m build
-3. python3 -m twine upload --repository testpypi dist/*
-   For the username, use __token__. For the password, use the token value, including the pypi- prefix.
-
-
-Pypi doesn't allow to re-release (even if releases or projects are deleted). 
-If something needs to be fixed, increase the 4th number in the version in pyproject.toml. 
+Note: Pypi doesn't allow to re-release (even if releases or projects are
+deleted). If you want to release this package for a new version of Vale, just
+update the `version` attribute found in `pyproject.toml` so that it matches the
+version of Vale that you want to release. If something needs to be fixed in
+this package, use or increase the 4th number in the version in `pyproject.toml`.
+The 4th number will be ignored when it comes to downloading Vale. For example,
+if you use `2.20.0.1`, this package will try to download `vale==2.20.0`. The
+python package version will still be `2.20.0.1`.
