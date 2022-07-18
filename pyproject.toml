@@ -2,13 +2,16 @@
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.distutils.bdist_wheel]
+universal = true
+
 [project]
 name="vale"
 # This version corresponds to the original Vale's version, plus a 4th number to
 # account for fixes to this package. That 4th number is needed because PyPi
 # doesn't allow to re-release or upload deleted versions, every uploaded
 # version must be unique.
-version = "2.20.0.1"
+version = "2.20.0.2"
 authors = [
   { name="Dani Perez", email="daniperez@example.com" },
 ]
