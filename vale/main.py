@@ -130,4 +130,4 @@ def main():
     """Download vale if not downloaded and executes it."""
     vale_bin_path = download_vale_if_missing()
 
-    os.execvp(f"{vale_bin_path}", sys.argv[:1])
+    os.execvp(f"{vale_bin_path}", ["vale"] + sys.argv[1:])
