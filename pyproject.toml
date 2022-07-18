@@ -8,7 +8,7 @@ name="vale"
 # account for fixes to this package. That 4th number is needed because PyPi
 # doesn't allow to re-release or upload deleted versions, every uploaded
 # version must be unique.
-version = "2.20.0.7"
+version = "2.20.0.6"
 authors = [
   { name="Dani Perez", email="daniperez@example.com" },
 ]

@@ -19,19 +19,8 @@ permissions:
 
 jobs:
   deploy:
-    name: build py3.${{ matrix.python-version }} on ${{ matrix.platform || matrix.os }}
     environment: testing
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu , macos , windows]
-        python-version: ['7', '8', '9', '10']
-        include:
-        - os: ubuntu
-          platform: linux
-        - os: windows
-          ls: dir
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python
@@ -41,16 +30,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install build twine setuptools wheel cibuildwheel
-    - name: Build ${{ matrix.platform || matrix.os }} package 
-      run: cibuildwheel --output-dir dist
-      env:
-        CIBW_BUILD: 'cp3${{ matrix.python-version }}-*'
-        CIBW_SKIP: '*-win32'
-        CIBW_PLATFORM: '${{ matrix.platform || matrix.os }}'
-        # CIBW_MANYLINUX_X86_64_IMAGE: 'manylinux2014'
-        # CIBW_MANYLINUX_I686_IMAGE: 'manylinux2014'
-        CIBW_ARCHS_MACOS: 'x86_64 arm64'
+        pip install build
+    - name: Build package
+      run: python -m build
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
