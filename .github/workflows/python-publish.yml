@@ -19,7 +19,10 @@ permissions:
 
 jobs:
   deploy:
-    environment: testing
+    # Environments testing / production corresponding
+    # to PyPi testing and production servers.
+    # environment: testing
+    environment: production 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
