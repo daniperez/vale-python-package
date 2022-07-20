@@ -9,7 +9,8 @@
 [Vale](https://vale.sh/) is a command-line tool that can enforce an editorial
 style guide onto your text. It's written in Go. The purpose of this package is
 to allow Python users to have Vale as a dependency of a Python application or
-library.
+library and this way allow installing Vale without resorting to manual installation
+or similar.
 
 # Installation 
 You can add `vale` package as a dependency in your `setup.py`,

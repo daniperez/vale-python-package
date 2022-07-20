@@ -15,7 +15,7 @@ version = "2.20.0.9"
 authors = [
   { name="Dani Perez"},
 ]
-description = "Install Vale (grammar & style check tool) in python environments."
+description = "Install and use Vale (grammar & style check tool) in python environments."
 readme = "README.md"
 license = "MIT" 
 requires-python = ">=3.7"
