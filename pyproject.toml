@@ -13,11 +13,11 @@ name="vale"
 # version must be unique.
 version = "2.20.0.9"
 authors = [
-  { name="Dani Perez", email="daniperez@example.com" },
+  { name="Dani Perez"},
 ]
 description = "Install Vale (grammar & style check tool) in python environments."
 readme = "README.md"
-license = { file="LICENSE" }
+license = "MIT" 
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
