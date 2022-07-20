@@ -17,7 +17,7 @@ authors = [
 ]
 description = "Install and use Vale (grammar & style check tool) in python environments."
 readme = "README.md"
-license = "MIT" 
+license = { text="MIT" }
 requires-python = ">=3.7"
 classifiers = [
     "Programming Language :: Python :: 3",
