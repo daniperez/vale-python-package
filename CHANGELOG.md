@@ -1,3 +1,6 @@
+# 2.20.1.0
+- Releasing v2.20.1 of Vale.
+
 # 2.20.0.9
 - Delivering package to Pypi (main).
 
