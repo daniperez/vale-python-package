@@ -30,8 +30,9 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
       - name: Build ${{ matrix.archs }} ${{ matrix.build }} wheel on ${{ matrix.os }}
-        run: |
-          python -m pip install -U pip \ 
+        - run:
+          python -m pip install install --upgrade pip
+        - run:
           python -m pip wheel -w ./wheelhouse/ pyproject.toml 
       # uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       # with:
