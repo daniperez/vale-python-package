@@ -22,18 +22,13 @@ jobs:
             archs: "x86"
           - os: macos-11
             archs: "x86_64, arm64"
-    env:
-      CIBW_ARCHS_LINUX: x86_64 i686 aarch64
-      CIBW_ARCHS_MACOS: x86_64 universal2
-      CIBW_BUILD: "cp36-* cp37-* cp38-* cp39-* cp310-*"
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
       - name: Build ${{ matrix.archs }} ${{ matrix.build }} wheel on ${{ matrix.os }}
-        - run:
-          python -m pip install install --upgrade pip
-        - run:
-          python -m pip wheel -w ./wheelhouse/ pyproject.toml 
+        run: |
+          python -m pip install --upgrade pip build
+          python -m build --wheel --outdir ./wheelhouse/ pyproject.toml 
       # uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       # with:
       #  user: __token__
