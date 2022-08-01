@@ -8,31 +8,20 @@ on:
 
 jobs:
   build_wheels:
-    name: Build ${{ matrix.archs }} ${{ matrix.build }} wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-20.04]
-        archs: ["x86_64, i686", "aarch64", "ppc64le", "s390x"]
-        build: ["manylinux", "musllinux"]
-        include:
-          - os: windows-2019
-            archs: "AMD64"
-          - os: windows-2019
-            archs: "x86"
-          - os: macos-11
-            archs: "x86_64, arm64"
+    name: Build wheel and upload
+    # environment: Production 
+    environment: Testing 
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
-      - name: Build ${{ matrix.archs }} ${{ matrix.build }} wheel on ${{ matrix.os }}
+      - name: Build
         run: |
           python -m pip install --upgrade pip build
           python -m build --wheel --outdir ./wheelhouse/ .
-      # uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
-      # with:
-      #  user: __token__
-      #  password: ${{ secrets.PYPI_API_TOKEN }} 
-      #  repository_url: ${{ secrets.PYPI_URL }}
-      #  skip_existing: true
-      #  path: ./wheelhouse/*.whl
+      - uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+        with:
+         user: __token__
+         password: ${{ secrets.PYPI_API_TOKEN }} 
+         repository_url: ${{ secrets.PYPI_URL }}
+         skip_existing: true
+         path: ./wheelhouse/*.whl
