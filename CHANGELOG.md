@@ -1,3 +1,6 @@
+# 2.20.2.0
+- Using Vale v2.20.2.
+
 # 2.20.1.0
 - Releasing v2.20.1 of Vale.
 
