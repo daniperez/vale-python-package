@@ -21,7 +21,7 @@ else:
 
 
 def major_minor_patch(version: str) -> str:
-    """E.g.: 2.20.0.1 -> 2.20.0 ."""
+    """E.g.: 2.20.0.1 -> 2.20.0 """
     return ".".join(version.split(".")[0:3])
 
 
@@ -93,8 +93,9 @@ def download_vale_if_missing() -> str:
     """Download vale only if missing."""
     vale_bin_path = Path(vale.__file__).parent / "vale_bin"
 
-    # See vale/vale_bin (in repo, not in its installed form) for an explanation
-    # of this magic number of bytes.
+    # We have a dummy vale placeholder that is overwritten by the downloaded vale version.
+    # See `vale/vale_bin` (in this repo, not in its installed form) for more details about
+    # this magic number of bytes.
     if vale_bin_path.stat().st_size < 1000:
 
         print("* vale not found. Downloading it...")
