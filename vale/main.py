@@ -47,7 +47,7 @@ def get_target() -> (str, str, str):
 
     if os.uname().machine.startswith("x86_64"):
         architecture = "64-bit"
-    elif os.uname().architecture.startswith("arm"):
+    elif os.uname().machine.startswith("arm"):
         # This is a loose match. Theoretical valid values:
         # aarch64_be, aarch64, armv8b, armv8, larm64.
         # I need confirmation.
