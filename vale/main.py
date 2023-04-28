@@ -2,6 +2,7 @@
 """Downloads Vale if not downloaded yet and executes it."""
 
 import os
+import platform
 import shutil
 import sys
 import tarfile
@@ -45,7 +46,10 @@ def get_target() -> (str, str, str):
     elif sys.platform.startswith("win32"):
         operating_system = "Windows"
 
-    if os.uname().machine.startswith("x86_64"):
+    if operating_system == "Windows":
+        convert_arch = {"32bit": "32-bit", "64bit": "64-bit"}
+        architecture = convert_arch.get(platform.architecture()[0], None)
+    elif os.uname().machine.startswith("x86_64"):
         architecture = "64-bit"
     elif os.uname().machine.startswith("arm"):
         # This is a loose match. Theoretical valid values:
