@@ -73,7 +73,9 @@ def get_target() -> (str, str, str):
     return operating_system, architecture, extension
 
 
-def extract_vale(archive: str, archive_type: str, destination: str) -> str:
+def extract_vale(
+    archive: str, archive_type: str, destination: str, bin_name: str = "vale"
+) -> str:
     """Extract `vale` binary from the given archive."""
     if archive_type == "zip":
         archiver = zipfile.ZipFile(archive)
@@ -86,7 +88,7 @@ def extract_vale(archive: str, archive_type: str, destination: str) -> str:
     with archiver(archive) as archive_volume:
         archive_volume.extractall(destination)
 
-    vale_tmp_path = Path(destination) / "vale"
+    vale_tmp_path = Path(destination) / bin_name
 
     assert (vale_tmp_path.exists())
 
@@ -121,7 +123,8 @@ def download_vale_if_missing() -> str:
 
             with tempfile.TemporaryDirectory() as td:
 
-                vale_tmp_path = extract_vale(tp.name, extension, td)
+                archive_bin_name = "vale.exe" if operating_system == "Windows" else "vale"
+                vale_tmp_path = extract_vale(tp.name, extension, td, archive_bin_name)
 
                 print(f"* Copying {vale_tmp_path} to {vale_bin_path}")
                 shutil.copy(f"{vale_tmp_path}", f"{vale_bin_path}")
