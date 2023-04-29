@@ -2,6 +2,7 @@
 """Downloads Vale if not downloaded yet and executes it."""
 
 import os
+import platform
 import shutil
 import sys
 import tarfile
@@ -45,7 +46,10 @@ def get_target() -> (str, str, str):
     elif sys.platform.startswith("win32"):
         operating_system = "Windows"
 
-    if os.uname().machine.startswith("x86_64"):
+    if operating_system == "Windows":
+        convert_arch = {"32bit": "32-bit", "64bit": "64-bit"}
+        architecture = convert_arch.get(platform.architecture()[0], None)
+    elif os.uname().machine.startswith("x86_64"):
         architecture = "64-bit"
     elif os.uname().machine.startswith("arm"):
         # This is a loose match. Theoretical valid values:
@@ -69,10 +73,12 @@ def get_target() -> (str, str, str):
     return operating_system, architecture, extension
 
 
-def extract_vale(archive: str, archive_type: str, destination: str) -> str:
+def extract_vale(
+    archive: str, archive_type: str, destination: str, bin_name: str = "vale"
+) -> str:
     """Extract `vale` binary from the given archive."""
     if archive_type == "zip":
-        archiver = zipfile.ZipFile(archive)
+        archiver = zipfile.ZipFile
     elif archive_type == "tar.gz":
         archiver = partial(tarfile.open, mode="r:gz")
     else:
@@ -82,7 +88,7 @@ def extract_vale(archive: str, archive_type: str, destination: str) -> str:
     with archiver(archive) as archive_volume:
         archive_volume.extractall(destination)
 
-    vale_tmp_path = Path(destination) / "vale"
+    vale_tmp_path = Path(destination) / bin_name
 
     assert (vale_tmp_path.exists())
 
@@ -109,7 +115,8 @@ def download_vale_if_missing() -> str:
 
         url = urlopen(url)
 
-        with tempfile.NamedTemporaryFile(mode="w+b") as tp:
+        # delete=False is required to avoid permissions errors on windows
+        with tempfile.NamedTemporaryFile(mode="w+b", delete=False) as tp:
 
             tp.write(url.read())
 
@@ -117,10 +124,17 @@ def download_vale_if_missing() -> str:
 
             with tempfile.TemporaryDirectory() as td:
 
-                vale_tmp_path = extract_vale(tp.name, extension, td)
+                archive_bin_name = "vale.exe" if operating_system == "Windows" else "vale"
+                vale_tmp_path = extract_vale(tp.name, extension, td, archive_bin_name)
 
                 print(f"* Copying {vale_tmp_path} to {vale_bin_path}")
                 shutil.copy(f"{vale_tmp_path}", f"{vale_bin_path}")
+
+        # clean up the temp file if it still exists
+        try:
+            os.unlink(tp.name)
+        except Exception:
+            pass
 
         print("* vale extracted and copied to module path.")
 
