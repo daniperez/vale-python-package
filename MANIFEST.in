@@ -1,1 +1,2 @@
 include vale/vale_bin
+include vale/vale.exe

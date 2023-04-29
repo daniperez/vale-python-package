@@ -97,7 +97,13 @@ def extract_vale(
 
 def download_vale_if_missing() -> str:
     """Download vale only if missing."""
-    vale_bin_path = Path(vale.__file__).parent / "vale_bin"
+
+    operating_system, architecture, extension = get_target()
+
+    if operating_system == "Windows":
+        vale_bin_path = Path(vale.__file__).parent / "vale.exe"
+    else:
+        vale_bin_path = Path(vale.__file__).parent / "vale_bin"
 
     # We have a dummy vale placeholder that is overwritten by the downloaded vale version.
     # See `vale/vale_bin` (in this repo, not in its installed form) for more details about
@@ -105,8 +111,6 @@ def download_vale_if_missing() -> str:
     if vale_bin_path.stat().st_size < 1000:
 
         print("* vale not found. Downloading it...")
-
-        operating_system, architecture, extension = get_target()
 
         url = ("https://github.com/errata-ai/vale/releases/download"
                f"/v{vale_bin_version}/"
