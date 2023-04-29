@@ -78,7 +78,7 @@ def extract_vale(
 ) -> str:
     """Extract `vale` binary from the given archive."""
     if archive_type == "zip":
-        archiver = zipfile.ZipFile(archive)
+        archiver = zipfile.ZipFile
     elif archive_type == "tar.gz":
         archiver = partial(tarfile.open, mode="r:gz")
     else:
