@@ -115,7 +115,8 @@ def download_vale_if_missing() -> str:
 
         url = urlopen(url)
 
-        with tempfile.NamedTemporaryFile(mode="w+b") as tp:
+        # delete=False is required to avoid permissions errors on windows
+        with tempfile.NamedTemporaryFile(mode="w+b", delete=False) as tp:
 
             tp.write(url.read())
 
@@ -128,6 +129,12 @@ def download_vale_if_missing() -> str:
 
                 print(f"* Copying {vale_tmp_path} to {vale_bin_path}")
                 shutil.copy(f"{vale_tmp_path}", f"{vale_bin_path}")
+
+        # clean up the temp file if it still exists
+        try:
+            os.unlink(tp.name)
+        except Exception:
+            pass
 
         print("* vale extracted and copied to module path.")
 
