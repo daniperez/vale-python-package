@@ -109,19 +109,21 @@ def download_vale_if_missing() -> str:
 
         operating_system, architecture, extension = get_target()
 
-        url = ("https://github.com/errata-ai/vale/releases/download"
-               f"/v{vale_bin_version}/"
-               f"vale_{vale_bin_version}_{operating_system}_{architecture}"
-               f".{extension}")
+        url_str = (
+            "https://github.com/errata-ai/vale/releases/download"
+            f"/v{vale_bin_version}/"
+            f"vale_{vale_bin_version}_{operating_system}_{architecture}"
+            f".{extension}"
+        )
 
-        url = urlopen(url)
+        url = urlopen(url_str)
 
         # delete=False is required to avoid permissions errors on windows
         with tempfile.NamedTemporaryFile(mode="w+b", delete=False) as tp:
 
             tp.write(url.read())
 
-            print(f"* {url} downloaded to {tp.name}")
+            print(f"* {url_str} downloaded to {tp.name}")
 
             with tempfile.TemporaryDirectory() as td:
 
