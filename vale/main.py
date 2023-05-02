@@ -4,6 +4,7 @@
 import os
 import platform
 import shutil
+import subprocess
 import sys
 import tarfile
 import tempfile
@@ -145,4 +146,6 @@ def main():
     """Download vale if not downloaded and executes it."""
     vale_bin_path = download_vale_if_missing()
 
-    os.execvp(f"{vale_bin_path}", ["vale"] + sys.argv[1:])
+    proc = subprocess.Popen([f"{vale_bin_path}"] + sys.argv[1:])
+    ret_code = proc.wait()
+    sys.exit(ret_code)
