@@ -146,5 +146,5 @@ def main():
     """Download vale if not downloaded and executes it."""
     vale_bin_path = download_vale_if_missing()
 
-    ret_code = subprocess.call([f"{vale_bin_path}"] + sys.argv[1:])
-    sys.exit(ret_code)
+    proc = subprocess.run([f"{vale_bin_path}"] + sys.argv[1:])
+    sys.exit(proc.returncode)
