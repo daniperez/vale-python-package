@@ -32,10 +32,6 @@ downloaded the first time you execute `vale`**.
 2. Commit & push.
 3. Github's Actions will deal with the new release.
 
-Note: you can create as many commits as versions (one commit by version).
-Every commit will be tested individually and published to PyPi if it's
-not already the case.
-
 Note: Pypi doesn't allow to re-release (even if releases or projects are
 deleted). If you want to release this package for a new version of Vale, just
 update the `version` attribute found in `pyproject.toml` so that it matches the
