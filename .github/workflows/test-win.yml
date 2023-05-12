@@ -1,0 +1,35 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+name: Test Windows 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+permissions:
+  contents: read
+jobs:
+  build:
+    environment: testing
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.7"
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade build
+    - name: Build wheel & install
+      run: |
+        python -m build --sdist --wheel
+        $VALE_VERSION = (Get-Content pyproject.toml | Select-String '^version').ToString().Split('"')[1]
+        Write-Host "Installing $VALE_VERSION ..."
+        python -m pip install -v "./dist/vale-$VALE_VERSION-py3-none-any.whl"
+    - name: Test
+      working-directory: ${{ runner.temp }}
+      run: |
+        vale sync --config ${{ github.workspace }}\vale.ini.sample
+        vale --config ${{ github.workspace }}\vale.ini.sample
