@@ -31,4 +31,5 @@ jobs:
     - name: Test
       working-directory: ${{ runner.temp }}
       run: |
-        vale
+        vale sync --config ${{ github.workspace }}\vale.ini.sample
+        vale --config ${{ github.workspace }}\vale.ini.sample
