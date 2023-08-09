@@ -12,21 +12,23 @@ to allow Python users to have Vale as a dependency of a Python application or
 library and this way allow installing Vale without resorting to manual installation
 or similar.
 
-# Installation 
+## Installation
+
 You can add `vale` package as a dependency in your `setup.py`,
 `requirements.txt` or `pyproject.toml` file depending on how are you managing
 dependencies. For example, in `requirements.txt`:
 
+```shell
+vale==2.28.1
 ```
-vale==2.20.0
-``` 
 
 The version of this Python package corresponds exactly to Vale's version.  That
 is, if you add `vale==2.20.0` as a dependency, Vale with that same version will
 be installed.  Note that **Vale as such is not included in this package but
 downloaded the first time you execute `vale`**.
 
-# Releasing (only for contributors)
+## Releasing (only for contributors)
+
 1. Change version in `pyproject.toml`. Changing the version changes the
    version of Vale that gets downloaded. See note below.
 2. Commit & push.
