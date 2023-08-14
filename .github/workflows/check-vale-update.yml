@@ -1,0 +1,38 @@
+name: Schedule Commit
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # This schedule runs every day at midnight UTC
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+   
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Check Vale's last version
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        VALE_LAST_VERSION=$(gh release list -L 1 -R errata-ai/vale | cut -f 1 | tr -d "v")
+        VALE_PYTHON_LAST_VERSION=$(cat pyproject.toml | grep "^version =" | cut -d "\"" -f 2 | sed "s/\.[^.]*$//" | cut -d "." -f -3)
+        echo "Current Vale version        : $VALE_LAST_VERSION" 
+        echo "Current Python Vale version : $VALE_PYTHON_LAST_VERSION" 
+
+        if [[ "$VALE_LAST_VERSION" == "$VALE_PYTHON_LAST_VERSION" ]]; then 
+          echo "Same versions 🎉"
+          gh run cancel ${{ github.run_id }}
+          gh run watch ${{ github.run_id }}
+        elif [ -n "$VALE_LAST_VERSION" ]; then # not-empty
+          echo "Versions differ, updating."
+          echo "VALE_LAST_VERSION=$VALE_LAST_VERSION" >> $GITHUB_OUTPUT
+        fi
+      
+    - name: Version bump 
+      if: ${{ success() }} 
+      run: |
+        # Commit version bump (change pyproject.yaml, CHANGELOG and README.md):
+        VALE_LAST_VERSION=${{ steps.vars.outputs.VALE_LAST_VERSION }}
+        echo "Version bump to $VALE_LAST_VERSION, automatically. Coming soon."
