@@ -24,8 +24,6 @@ jobs:
 
         if [[ "$VALE_LAST_VERSION" == "$VALE_PYTHON_LAST_VERSION" ]]; then 
           echo "Same versions 🎉"
-          gh run cancel ${{ github.run_id }}
-          gh run watch ${{ github.run_id }}
         elif [ -n "$VALE_LAST_VERSION" ]; then # not-empty
           echo "Versions differ, updating."
           echo "VALE_LAST_VERSION=$VALE_LAST_VERSION" >> $GITHUB_OUTPUT
