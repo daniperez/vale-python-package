@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.28.2.1 (2023-08-18)
+
+- Improved temporary folder management for
+  downloading Vale.
+- Simplified how the package to download is determined.
+
 ## 2.28.2.0 (2023-08-18) 
 
 - Using Vale v2.28.2
