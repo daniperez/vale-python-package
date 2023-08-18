@@ -53,4 +53,4 @@ jobs:
       uses: peter-evans/create-pull-request@v5
       with:
         commit-message: Version Bump ${{steps.check-last-version.outputs.VALE_LAST_VERSION}} 
-        title: "[BOT] Version Bump ${{steps.check-last-version.outputs.VALE_LAST_VERSION}}"
+        title: "[BOT] Update Vale to v${{steps.check-last-version.outputs.VALE_LAST_VERSION}}"
