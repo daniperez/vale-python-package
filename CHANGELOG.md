@@ -1,8 +1,12 @@
 # Changelog
 
-## 2.28.2.0 
+## 2.28.2.0 (2023-08-18) 
 
 - Using Vale v2.28.2
+- Since this release, the version bump
+  of Vale (i.e. the sync of versions) is
+  managed automatically by a Github Action, 
+  scheduled once a day.
 
 ## 2.28.1.0 (2023-08-09)
 
