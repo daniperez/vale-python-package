@@ -3,6 +3,7 @@ name: Schedule Commit
 on:
   schedule:
     - cron: '0 0 * * *'  # This schedule runs every day at midnight UTC
+  workflow_dispatch:
 
 jobs:
   update-version:
