@@ -10,7 +10,7 @@ jobs:
    
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Check Vale's last version
       id: check-last-version
@@ -31,7 +31,19 @@ jobs:
       
     - name: Version bump 
       if: steps.check-last-version.outputs.VALE_LAST_VERSION
+      env:
+        VALE_LAST_VERSION: ${{steps.check-last-version.outputs.VALE_LAST_VERSION}}
       run: |
         # Commit version bump (change pyproject.yaml, CHANGELOG and README.md):
-        VALE_LAST_VERSION=${{ steps.vars.outputs.VALE_LAST_VERSION }}
         echo "Version bump to $VALE_LAST_VERSION, automatically. Coming soon."
+        # 1. add entry to changelog
+        # 2. modify version
+        #
+    - name: Create Pull Request with Version Bump
+      if: false # steps.check-last-version.outputs.VALE_LAST_VERSION
+      env:
+        VALE_LAST_VERSION: ${{steps.check-last-version.outputs.VALE_LAST_VERSION}}
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: Version Bump ${{steps.check-last-version.outputs.VALE_LAST_VERSION}} 
+        title: "[BOT] Version Bump ${{steps.check-last-version.outputs.VALE_LAST_VERSION}}"
