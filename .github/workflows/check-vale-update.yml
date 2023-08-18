@@ -45,6 +45,7 @@ jobs:
         sed -i -e "s/vale==${VALE_PYTHON_LAST_VERSION}/vale==${VALE_LAST_VERSION}/" README.md 
         sed -i -e "s/version = \"${VALE_PYTHON_LAST_VERSION}.*\"/version = \"${VALE_LAST_VERSION}.0\"/" pyproject.toml
         echo "Done!"
+        git diff
 
     - name: Create Pull Request with Version Bump
       if: steps.check-last-version.outputs.VALE_LAST_VERSION
