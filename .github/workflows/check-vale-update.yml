@@ -40,10 +40,10 @@ jobs:
         # Commit version bump (change pyproject.yaml, CHANGELOG and README.md):
         echo "Version bump to $VALE_LAST_VERSION:"
         echo "🗒️ Adding a changelog entry"
-        sed -i -e "s/# Changelog/# Changelog\n\n## ${VALE_LAST_VERSION}.0 \n\n- Using Vale v${VALE_LAST_VERSION}/w" CHANGELOG.md
+        sed -i -e "s/# Changelog/# Changelog\n\n## ${VALE_LAST_VERSION}.0 \n\n- Using Vale v${VALE_LAST_VERSION}/" CHANGELOG.md
         echo "✍️  Updating version"
-        sed -i -e "s/vale==${VALE_PYTHON_LAST_VERSION}/vale=${VALE_LAST_VERSION}/w" README.md 
-        sed -i -e "s/version = \"2\.28\.1.*\"/version = \"2.29.1.0\"/w" pyproject.toml
+        sed -i -e "s/vale==${VALE_PYTHON_LAST_VERSION}/vale=${VALE_LAST_VERSION}/" README.md 
+        sed -i -e "s/version = \"2\.28\.1.*\"/version = \"2.29.1.0\"/" pyproject.toml
         echo "Done!"
 
     - name: Create Pull Request with Version Bump
