@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.28.2.0 
+
+- Using Vale v2.28.2
+
 ## 2.28.1.0 (2023-08-09)
 
 - Using Vale v2.28.1
