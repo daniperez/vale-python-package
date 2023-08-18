@@ -29,6 +29,10 @@ downloaded the first time you execute `vale`**.
 
 ## Releasing (only for contributors)
 
+New releases using a new Vale version are automated. See
+[Version Bump if Vale Updated](.github/workflows/check-vale-update.yml) workflow.
+
+### Manual release 
 1. Change version in `pyproject.toml`. Changing the version changes the
    version of Vale that gets downloaded. See note below.
 2. Commit & push.
