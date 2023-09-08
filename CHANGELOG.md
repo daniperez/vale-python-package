@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.28.3.0 (2023-09-08)
+
+- Using Vale v2.28.3
+
 ## 2.28.2.1 (2023-08-18)
 
 - Improved temporary folder management for
