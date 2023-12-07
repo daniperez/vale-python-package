@@ -48,7 +48,7 @@ def get_target() -> Tuple[str, str, str]:
         operating_system = "Windows"
 
     if platform.processor() == "arm":
-        architecture = "arm"
+        architecture = "arm64"
     else:
         convert_arch = {"32bit": "32-bit", "64bit": "64-bit"}
         architecture = convert_arch.get(platform.architecture()[0], None)
