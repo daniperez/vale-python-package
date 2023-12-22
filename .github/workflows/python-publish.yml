@@ -38,7 +38,6 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
-        skip_existing: true
   publish:
     name: Publish Python 🐍 distribution 📦 to PyPI
     # if: startsWith(github.ref, 'refs/tags/')  # only publish to PyPI on tag pushes
