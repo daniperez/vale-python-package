@@ -11,12 +11,14 @@ name: Upload Python Package
 on:
   push:
     branches: [ "main" ]
-
+  workflow_call:
 permissions:
   contents: read
-
 jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
   build:
+    needs: [tests]
     name: Build distribution 📦
     environment: pypi
     runs-on: ubuntu-latest
@@ -31,7 +33,7 @@ jobs:
         python3 -m pip install --upgrade pip build --user
     - name: Build package
       run: python3 -m build
-    - name: Publish package
+    - name: Save wheels as artifacts 
       uses: actions/upload-artifact@v3
       with:
         name: python-package-distributions
