@@ -10,7 +10,7 @@ permissions:
   contents: read
 jobs:
   build:
-    environment: testing
+    environment: pypi 
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
         python -m pip install --upgrade build
     - name: Build wheel & install
       run: |
-        python -m build --sdist --wheel
+        python -m build
         $VALE_VERSION = (Get-Content pyproject.toml | Select-String '^version').ToString().Split('"')[1]
         Write-Host "Installing $VALE_VERSION ..."
         python -m pip install -v "./dist/vale-$VALE_VERSION-py3-none-any.whl"
