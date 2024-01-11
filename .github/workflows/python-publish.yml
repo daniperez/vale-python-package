@@ -32,7 +32,10 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip build --user
     - name: Build package
-      run: python3 -m build
+      run: >-
+        $(python -c "import support; support.get_vale_artifacts()")
+          python3 -m build
+
     - name: Publish package
       uses: actions/upload-artifact@v3
       with:
