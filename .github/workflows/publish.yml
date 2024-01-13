@@ -16,7 +16,7 @@ permissions:
   contents: read
 jobs:
   tests:
-    uses: ./.github/workflows/tests.yml
+    uses: ./.github/workflows/test.yml
   build:
     needs: [tests]
     name: Build distribution 📦
