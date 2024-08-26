@@ -19,7 +19,7 @@ You can add `vale` package as a dependency in your `setup.py`,
 dependencies. For example, in `requirements.txt`:
 
 ```shell
-vale==3.7.0
+vale==3.7.1
 ```
 
 The version of this Python package corresponds exactly to Vale's version.  That
