@@ -36,7 +36,7 @@ vale_bin_version = major_minor_patch(importlib_metadata.version("vale"))
 
 
 def get_target() -> Tuple[str, str, str]:
-    """Return Vale's target OS, architecture and extension to download."""
+    """Return Vale's target OS, architecture, and extension to download."""
     operating_system: Optional[str] = None
     architecture: Optional[str] = None
 
@@ -47,27 +47,31 @@ def get_target() -> Tuple[str, str, str]:
     elif sys.platform.startswith("win32"):
         operating_system = "Windows"
 
-    if platform.processor() == "arm":
+    # Determine the architecture
+    machine = platform.machine().lower()
+    if machine in ("arm64", "aarch64"):
         architecture = "arm64"
+    elif machine in ("x86_64", "amd64"):
+        architecture = "64-bit"
+    elif machine in ("i386", "i686"):
+        architecture = "32-bit"
     else:
-        convert_arch = {"32bit": "32-bit", "64bit": "64-bit"}
-        architecture = convert_arch.get(platform.architecture()[0], None)
-
-    if not operating_system:
         raise RuntimeError(
-            f"Operating system '{sys.platform}' not supported. "
-            "Supported operating systems are 'linux', 'darwin' and 'win32'."
-        )
-    if not architecture:
-        raise RuntimeError(
-            f"Architecture {os.uname().machine} not supported. "
-            "Supported architectures are 'x86_64' and 'arm'"
+            f"Architecture '{machine}' is not supported. "
+            "Supported architectures are 'x86_64', 'arm64', and 'i386'."
         )
 
+    # Determine file extension
     if operating_system == "Windows":
         extension = "zip"
     else:
         extension = "tar.gz"
+
+    if not operating_system:
+        raise RuntimeError(
+            f"Operating system '{sys.platform}' not supported. "
+            "Supported operating systems are 'linux', 'darwin', and 'win32'."
+        )
 
     return operating_system, architecture, extension
 
