@@ -46,10 +46,17 @@ def get_target() -> Tuple[str, str, str]:
         operating_system = "macOS"
     elif sys.platform.startswith("win32"):
         operating_system = "Windows"
+    else:
+        raise RuntimeError(
+            f"Operating system '{sys.platform}' not supported. "
+            "Supported operating systems are 'linux', 'darwin', and 'win32'."
+        )
 
     # Determine the architecture
     machine = platform.machine().lower()
-    if machine in ("arm64", "aarch64"):
+    if (
+        machine in ("arm64", "aarch64", "arm")
+    ):  # aarch64 for virtualised Linux on Apple silicon and "arm" for native MacOS on APPLE SILICON
         architecture = "arm64"
     elif machine in ("x86_64", "amd64"):
         architecture = "64-bit"
@@ -58,7 +65,7 @@ def get_target() -> Tuple[str, str, str]:
     else:
         raise RuntimeError(
             f"Architecture '{machine}' is not supported. "
-            "Supported architectures are 'x86_64', 'arm64', and 'i386'."
+            "Supported architectures are 'x86_64','amd64', 'arm64','aarch64', 'i386'  and 'i686'."
         )
 
     # Determine file extension
@@ -108,7 +115,6 @@ def download_vale_if_missing() -> str:
     # vale version. See `vale/vale_bin` (in this repo, not in its installed
     # form) for more details about this magic number of bytes.
     if vale_bin_path.stat().st_size < 1000:
-
         print("* vale not found. Downloading it...")
 
         operating_system, architecture, extension = get_target()
@@ -123,13 +129,11 @@ def download_vale_if_missing() -> str:
         url = urlopen(url_str)
 
         with tempfile.TemporaryDirectory() as temp_dir:
-
             temp_dir_path = Path(temp_dir)
 
             archive_temp_file_path = temp_dir_path / "vale.zip"
 
             with open(str(archive_temp_file_path), "wb") as archive_temp_file:
-
                 archive_temp_file.write(url.read())
 
                 print(f"* {url_str} downloaded to {archive_temp_file.name}")
