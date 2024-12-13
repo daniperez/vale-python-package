@@ -36,7 +36,7 @@ vale_bin_version = major_minor_patch(importlib_metadata.version("vale"))
 
 
 def get_target() -> Tuple[str, str, str]:
-    """Return Vale's target OS, architecture and extension to download."""
+    """Return Vale's target OS, architecture, and extension to download."""
     operating_system: Optional[str] = None
     architecture: Optional[str] = None
 
@@ -46,24 +46,34 @@ def get_target() -> Tuple[str, str, str]:
         operating_system = "macOS"
     elif sys.platform.startswith("win32"):
         operating_system = "Windows"
-
-    if platform.processor() == "arm":
-        architecture = "arm64"
     else:
-        convert_arch = {"32bit": "32-bit", "64bit": "64-bit"}
-        architecture = convert_arch.get(platform.architecture()[0], None)
-
-    if not operating_system:
         raise RuntimeError(
             f"Operating system '{sys.platform}' not supported. "
-            "Supported operating systems are 'linux', 'darwin' and 'win32'."
-        )
-    if not architecture:
-        raise RuntimeError(
-            f"Architecture {os.uname().machine} not supported. "
-            "Supported architectures are 'x86_64' and 'arm'"
+            "Supported operating systems are 'linux', 'darwin', and 'win32'."
         )
 
+    # Determine the architecture
+    machine = platform.machine().lower()
+    if (
+        machine in ("arm64", "aarch64", "arm")
+    ):  # aarch64 for virtualised Linux on Apple silicon and "arm" for native MacOS on APPLE SILICON
+        architecture = "arm64"
+    elif machine in ("x86_64", "amd64"):
+        architecture = "64-bit"
+    elif machine in ("i386", "i686"):
+        architecture = "32-bit"  # leaving this here despite the error message for future 32bit support
+        raise RuntimeError(
+            "32-bit systems are not supported. " "Please use a 64-bit operating system."
+        )
+    else:
+        raise RuntimeError(
+            f"Architecture '{machine}' is not supported. "
+            "Supported architectures are 'x86_64','amd64', 'arm64' and 'aarch64'"
+        )
+
+    print(f"* Detected architecture: {architecture}")
+
+    # Determine file extension
     if operating_system == "Windows":
         extension = "zip"
     else:
@@ -104,7 +114,6 @@ def download_vale_if_missing() -> str:
     # vale version. See `vale/vale_bin` (in this repo, not in its installed
     # form) for more details about this magic number of bytes.
     if vale_bin_path.stat().st_size < 1000:
-
         print("* vale not found. Downloading it...")
 
         operating_system, architecture, extension = get_target()
@@ -119,13 +128,11 @@ def download_vale_if_missing() -> str:
         url = urlopen(url_str)
 
         with tempfile.TemporaryDirectory() as temp_dir:
-
             temp_dir_path = Path(temp_dir)
 
             archive_temp_file_path = temp_dir_path / "vale.zip"
 
             with open(str(archive_temp_file_path), "wb") as archive_temp_file:
-
                 archive_temp_file.write(url.read())
 
                 print(f"* {url_str} downloaded to {archive_temp_file.name}")
