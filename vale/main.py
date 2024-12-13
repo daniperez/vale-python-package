@@ -61,24 +61,23 @@ def get_target() -> Tuple[str, str, str]:
     elif machine in ("x86_64", "amd64"):
         architecture = "64-bit"
     elif machine in ("i386", "i686"):
-        architecture = "32-bit"
+        architecture = "32-bit"  # leaving this here despite the error message for future 32bit support
+        raise RuntimeError(
+            "32-bit systems are not supported. " "Please use a 64-bit operating system."
+        )
     else:
         raise RuntimeError(
             f"Architecture '{machine}' is not supported. "
-            "Supported architectures are 'x86_64','amd64', 'arm64','aarch64', 'i386'  and 'i686'."
+            "Supported architectures are 'x86_64','amd64', 'arm64' and 'aarch64'"
         )
+
+    print(f"* Detected architecture: {architecture}")
 
     # Determine file extension
     if operating_system == "Windows":
         extension = "zip"
     else:
         extension = "tar.gz"
-
-    if not operating_system:
-        raise RuntimeError(
-            f"Operating system '{sys.platform}' not supported. "
-            "Supported operating systems are 'linux', 'darwin', and 'win32'."
-        )
 
     return operating_system, architecture, extension
 
