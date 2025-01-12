@@ -4,6 +4,11 @@
 
 - Using Vale v3.9.3
 
+## 3.9.2.1 (2025-01-12)
+
+- Adds proper support for Macs, at least for the ones
+  that are supported by vale.
+
 ## 3.9.2.0 (2025-01-02)
 
 - Using Vale v3.9.2

@@ -2,6 +2,10 @@
 
 List of contributors, from more recent to less recent.
 
+# 2025
+
+@geoffreynyaga - Proper support of Macs, at least for the ones supported by vale.
+
 # 2023
 
 @stevepiercy - Fixes for ARM architectures
