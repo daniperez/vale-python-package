@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.9.3.0 (2025-01-12)
+
+- Using Vale v3.9.3
+
 ## 3.9.2.1 (2025-01-12)
 
 - Adds proper support for Macs, at least for the ones
