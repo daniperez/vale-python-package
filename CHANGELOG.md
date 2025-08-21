@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.12.0.1 (2025-08-21)
+
+- Avoid cluttering stdout with progress updates (#67).
+
 ## 3.12.0.0 (2025-06-10)
 
 - Using Vale v3.12.0
