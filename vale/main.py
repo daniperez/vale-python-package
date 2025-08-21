@@ -71,7 +71,7 @@ def get_target() -> Tuple[str, str, str]:
             "Supported architectures are 'x86_64','amd64', 'arm64' and 'aarch64'"
         )
 
-    print(f"* Detected architecture: {architecture}")
+    print(f"* Detected architecture: {architecture}", file=sys.stderr)
 
     # Determine file extension
     if operating_system == "Windows":
@@ -114,7 +114,7 @@ def download_vale_if_missing() -> str:
     # vale version. See `vale/vale_bin` (in this repo, not in its installed
     # form) for more details about this magic number of bytes.
     if vale_bin_path.stat().st_size < 1000:
-        print("* vale not found. Downloading it...")
+        print("* vale not found. Downloading it...", file=sys.stderr)
 
         operating_system, architecture, extension = get_target()
 
@@ -135,7 +135,10 @@ def download_vale_if_missing() -> str:
             with open(str(archive_temp_file_path), "wb") as archive_temp_file:
                 archive_temp_file.write(url.read())
 
-                print(f"* {url_str} downloaded to {archive_temp_file.name}")
+                print(
+                    f"* {url_str} downloaded to {archive_temp_file.name}",
+                    file=sys.stderr,
+                )
 
                 archive_temp_dir_path = temp_dir_path / "vale_unzipped"
 
@@ -152,10 +155,10 @@ def download_vale_if_missing() -> str:
                     bin_name=archive_bin_name,
                 )
 
-                print(f"* Copying {vale_tmp_path} to {vale_bin_path}")
+                print(f"* Copying {vale_tmp_path} to {vale_bin_path}", file=sys.stderr)
                 shutil.copy(f"{vale_tmp_path}", f"{vale_bin_path}")
 
-        print("* vale extracted and copied to module path.")
+        print("* vale extracted and copied to module path.", file=sys.stderr)
 
     return f"{vale_bin_path}"
 
