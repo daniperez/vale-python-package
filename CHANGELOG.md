@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.12.0.2 (2025-09-06)
+
+- Use the actual Vale archive instead of `vale.zip`(#68 & more code in this commit).
+
 ## 3.12.0.1 (2025-08-21)
 
 - Avoid cluttering stdout with progress updates (#67).

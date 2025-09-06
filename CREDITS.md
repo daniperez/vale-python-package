@@ -4,6 +4,8 @@ List of contributors, from more recent to less recent.
 
 # 2025
 
+@gaurav-nelson - Use real extension when downloading Vale archive.
+
 @kartben - Avoid cluttering stdout with the script progress updates.
 
 @geoffreynyaga - Proper support of Macs, at least for the ones supported by vale.
