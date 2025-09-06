@@ -118,11 +118,11 @@ def download_vale_if_missing() -> str:
 
         operating_system, architecture, extension = get_target()
 
+        vale_archive_file_name = f"vale_{vale_bin_version}_{operating_system}_{architecture}.{extension}"
+
         url_str = (
             "https://github.com/errata-ai/vale/releases/download"
-            f"/v{vale_bin_version}/"
-            f"vale_{vale_bin_version}_{operating_system}_{architecture}"
-            f".{extension}"
+            f"/v{vale_bin_version}/{vale_archive_file_name}"
         )
 
         url = urlopen(url_str)
@@ -130,7 +130,7 @@ def download_vale_if_missing() -> str:
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_dir_path = Path(temp_dir)
 
-            archive_temp_file_path = temp_dir_path / f"vale.{extension}"
+            archive_temp_file_path = temp_dir_path / f"{vale_archive_file_name}"
 
             with open(str(archive_temp_file_path), "wb") as archive_temp_file:
                 archive_temp_file.write(url.read())
