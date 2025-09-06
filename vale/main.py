@@ -130,7 +130,7 @@ def download_vale_if_missing() -> str:
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_dir_path = Path(temp_dir)
 
-            archive_temp_file_path = temp_dir_path / "vale.zip"
+            archive_temp_file_path = temp_dir_path / f"vale.{extension}"
 
             with open(str(archive_temp_file_path), "wb") as archive_temp_file:
                 archive_temp_file.write(url.read())
