@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.13.0.0 (2025-10-28)
+
+- Using Vale v3.13.0
+
 ## 3.12.0.2 (2025-09-06)
 
 - Use the actual Vale archive instead of `vale.zip`(#68 & more code in this commit).
