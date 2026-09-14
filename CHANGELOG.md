@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Retry transient failures when downloading Vale.
+
 ## 3.21.0.0 (2026-09-10)
 
 - Using Vale v3.21.0
