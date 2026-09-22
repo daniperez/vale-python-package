@@ -8,10 +8,12 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import zipfile
 from functools import partial
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
+from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
 import vale
@@ -33,6 +35,9 @@ def major_minor_patch(version: str) -> str:
 # ignored here. That 4th number is needed because PyPi doesn't allow to
 # re-release or upload deleted versions, every uploaded version must be unique.
 vale_bin_version = major_minor_patch(importlib_metadata.version("vale"))
+
+_DOWNLOAD_ATTEMPTS = 3
+_RETRYABLE_HTTP_STATUS_CODES = {408, 429}
 
 
 def get_target() -> Tuple[str, str, str]:
@@ -106,6 +111,30 @@ def extract_vale(
     return f"{vale_tmp_path}"
 
 
+def _open_download_url(url: str) -> Any:
+    """Open a download URL, retrying transient failures."""
+    for attempt in range(_DOWNLOAD_ATTEMPTS):
+        try:
+            return urlopen(url)
+        except HTTPError as error:
+            retryable = error.code in _RETRYABLE_HTTP_STATUS_CODES or 500 <= error.code < 600
+            if not retryable or attempt == _DOWNLOAD_ATTEMPTS - 1:
+                raise
+            error.close()
+        except URLError:
+            if attempt == _DOWNLOAD_ATTEMPTS - 1:
+                raise
+
+        delay = 2**attempt
+        print(
+            f"* Download failed. Retrying in {delay} second(s)...",
+            file=sys.stderr,
+        )
+        time.sleep(delay)
+
+    raise AssertionError("unreachable")
+
+
 def download_vale_if_missing() -> str:
     """Download vale only if missing."""
     vale_bin_path = Path(vale.__file__).parent / "vale_bin"
@@ -125,7 +154,7 @@ def download_vale_if_missing() -> str:
             f"/v{vale_bin_version}/{vale_archive_file_name}"
         )
 
-        url = urlopen(url_str)
+        url = _open_download_url(url_str)
 
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_dir_path = Path(temp_dir)
