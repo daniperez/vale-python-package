@@ -4,6 +4,14 @@
 
 - Retry transient failures when downloading Vale.
 
+## 3.25.1.0 (2026-10-23)
+
+- Using Vale v3.25.1
+
+## 3.24.0.0 (2026-10-22)
+
+- Using Vale v3.24.0
+
 ## 3.22.0.0 (2026-09-18)
 
 - Using Vale v3.22.0
