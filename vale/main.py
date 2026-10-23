@@ -3,6 +3,7 @@
 
 import os
 import platform
+import random
 import shutil
 import subprocess
 import sys
@@ -36,8 +37,7 @@ def major_minor_patch(version: str) -> str:
 # re-release or upload deleted versions, every uploaded version must be unique.
 vale_bin_version = major_minor_patch(importlib_metadata.version("vale"))
 
-_DOWNLOAD_ATTEMPTS = 3
-_RETRYABLE_HTTP_STATUS_CODES = {408, 429}
+_RETRYABLE_HTTP_STATUS_CODES = {408, 429, *range(500, 600)}
 
 
 def get_target() -> Tuple[str, str, str]:
@@ -113,24 +113,34 @@ def extract_vale(
 
 def _open_download_url(url: str) -> Any:
     """Open a download URL, retrying transient failures."""
-    for attempt in range(_DOWNLOAD_ATTEMPTS):
-        try:
-            return urlopen(url)
-        except HTTPError as error:
-            retryable = error.code in _RETRYABLE_HTTP_STATUS_CODES or 500 <= error.code < 600
-            if not retryable or attempt == _DOWNLOAD_ATTEMPTS - 1:
-                raise
-            error.close()
-        except URLError:
-            if attempt == _DOWNLOAD_ATTEMPTS - 1:
-                raise
+    timeout_seconds = 60
+    max_download_attempts = 5
+    scale_factor = 2
 
-        delay = 2**attempt
+    for attempt in range(max_download_attempts):
+        try:
+            return urlopen(url, timeout=timeout_seconds)
+        except HTTPError as error:
+            if (
+                error.code not in _RETRYABLE_HTTP_STATUS_CODES
+                or attempt == max_download_attempts - 1
+            ):
+                raise
+            failure_reason = f"HTTP {error.code}: {error.reason}"
+            error.close()
+        except (URLError, TimeoutError) as error:
+            if attempt == max_download_attempts - 1:
+                raise
+            failure_reason = str(error)
+
+        jitter_seconds = random.uniform(0, 10)
+        delay_seconds = (scale_factor * (2**attempt)) + jitter_seconds
         print(
-            f"* Download failed. Retrying in {delay} second(s)...",
+            f"* Download failed ({failure_reason}). "
+            f"Retrying in {delay_seconds} second(s)...",
             file=sys.stderr,
         )
-        time.sleep(delay)
+        time.sleep(delay_seconds)
 
     raise AssertionError("unreachable")
 

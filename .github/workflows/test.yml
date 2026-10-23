@@ -29,6 +29,8 @@ jobs:
         export VALE_VERSION="$(cat pyproject.toml  | grep '^version' | cut -d ' ' -f 3 | sed -e 's/"//g')"
         echo "Installing $VALE_VERSION ..."
         python -m pip install -v "./dist/vale-$VALE_VERSION-py3-none-any.whl"
+    - name: Test download retries
+      run: python -m unittest discover -s tests -v
     - name: Test Vale 
       run: |
         vale --help 
