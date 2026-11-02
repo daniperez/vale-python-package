@@ -1,6 +1,10 @@
 # Contributors
 
-List of contributors, from more recent to less recent.
+List of contributors:
+
+# 2026
+
+@adamtheturtle - Retry mechanism when downloading Vale.
 
 # 2025
 

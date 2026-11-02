@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 3.26.0.1 (2026-11-02)
 
 - Retry transient failures when downloading Vale.
 
