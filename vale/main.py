@@ -3,15 +3,18 @@
 
 import os
 import platform
+import random
 import shutil
 import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import zipfile
 from functools import partial
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
+from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
 import vale
@@ -33,6 +36,8 @@ def major_minor_patch(version: str) -> str:
 # ignored here. That 4th number is needed because PyPi doesn't allow to
 # re-release or upload deleted versions, every uploaded version must be unique.
 vale_bin_version = major_minor_patch(importlib_metadata.version("vale"))
+
+_RETRYABLE_HTTP_STATUS_CODES = {408, 429, *range(500, 600)}
 
 
 def get_target() -> Tuple[str, str, str]:
@@ -106,6 +111,40 @@ def extract_vale(
     return f"{vale_tmp_path}"
 
 
+def _open_download_url(url: str) -> Any:
+    """Open a download URL, retrying transient failures."""
+    timeout_seconds = 60
+    max_download_attempts = 5
+    scale_factor = 2
+
+    for attempt in range(max_download_attempts):
+        try:
+            return urlopen(url, timeout=timeout_seconds)
+        except HTTPError as error:
+            if (
+                error.code not in _RETRYABLE_HTTP_STATUS_CODES
+                or attempt == max_download_attempts - 1
+            ):
+                raise
+            failure_reason = f"HTTP {error.code}: {error.reason}"
+            error.close()
+        except (URLError, TimeoutError) as error:
+            if attempt == max_download_attempts - 1:
+                raise
+            failure_reason = str(error)
+
+        jitter_seconds = random.uniform(0, 10)
+        delay_seconds = (scale_factor * (2**attempt)) + jitter_seconds
+        print(
+            f"* Download failed ({failure_reason}). "
+            f"Retrying in {delay_seconds} second(s)...",
+            file=sys.stderr,
+        )
+        time.sleep(delay_seconds)
+
+    raise AssertionError("unreachable")
+
+
 def download_vale_if_missing() -> str:
     """Download vale only if missing."""
     vale_bin_path = Path(vale.__file__).parent / "vale_bin"
@@ -125,7 +164,7 @@ def download_vale_if_missing() -> str:
             f"/v{vale_bin_version}/{vale_archive_file_name}"
         )
 
-        url = urlopen(url_str)
+        url = _open_download_url(url_str)
 
         with tempfile.TemporaryDirectory() as temp_dir:
             temp_dir_path = Path(temp_dir)
