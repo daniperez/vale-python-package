@@ -4,6 +4,10 @@
 
 - Using Vale v3.28.1
 
+## 3.27.0.1 (2026-11-23)
+
+- Python checkout script was failing to download Python 3.9.
+
 ## 3.27.0.0 (2026-11-13)
 
 - Using Vale v3.27.0
